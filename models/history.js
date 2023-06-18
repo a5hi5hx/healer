@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { NUMBER } = require("sequelize");
 const freelancer = require("./freelancer.user.model");
 
 const Schema = mongoose.Schema;
