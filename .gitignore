@@ -1,0 +1,22 @@
+# Dependency directories
+npm-debug.log
+yarn-error.log
+
+# Environment variables file
+.env
+
+# Build output
+build/
+dist/
+
+# Editor and IDE files
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
