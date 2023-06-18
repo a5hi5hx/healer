@@ -2,11 +2,353 @@
 
 
 
-## Getting started
+## API DOCS
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+# User Authentication:
+#### POST /user/signup (username, email, password, phoneNumber) 
+---
+    -if Success
+    {
+    message: string,
+    success: bool,
+    token:  String,
+    }
+    
+    -if Failed
+    {
+    message: String,
+    success: bool,
+    }
+---
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+#### POST /otp/verifyUser (email,otp)
+---
+    -if Success (201)
+    {
+    message: user is verified ,
+    success:  true   }
+
+    -if Failed
+    {
+    message:Some error occurred,
+    success: false
+    }
+---
+
+#### POST /user/login (username, userpassword)
+---
+    -if Success
+    {
+    message: string,
+    success: bool,
+    token:  String,
+    _id: String,
+    username: String,
+    email: String,
+    phoneNumber: String,
+    isVerified: bool
+    }
+
+    -if Failed{
+    message: String,
+    success: bool
+    }
+    ---
+
+#### POST /user/tokenValid (x-auth-header (token)) // to check previously login
+---
+    -if Success
+    {
+    "msg": true,
+    "success": true,
+    "_id": "64882dcdfaca626c8cad8b12",
+    "username": "ashish",
+    "email": "ashishpaudel54@gmail.com",
+    "password": "$2a$10$IHFLN8DiIk/yBEsUjs0kgeigDvduQLYL.mTJ.5TPuJX.QVjxHyI9a",
+    "phoneNumber": "9874561230",
+    "isVerified": true
+    }
+
+    -if Failed{
+    message: String,
+    success: false
+    }
+    ---
+
+#### POST /company/addDetails (image, companyName, companyCategory, companyRating, companyDetails)
+---
+
+    -if Success (201)
+    {
+    "msg": "Company Details Added Successfully.",
+    "success": true,
+    "companyName": "BrandBuilder",
+    "companyCategory": "IT Services",
+    "companyRating": 3.2,
+    "companyDetails": "It COmpany",
+    "companyLogo": "http://res.cloudinary.com/djq37xptm/image/upload/v1686724803/jfmccml1pccm0hmkfziz.jpg",
+    "_id": "648960c331e8b1d00802de15",
+    }
+    -if Failed
+    {
+    message: String,
+    success: bool
+    }
+---
+
+#### GET /company/allCompanyDetails 
+---
+    -if Success (201)
+    {
+    "_id": "648960c331e8b1d00802de15",
+    "companyName": "BrandBuilder",
+    "companyCategory": "IT Services",
+    "companyRating": 3.2,
+    "companyDetails": "It COmpany",
+    "companyLogo": "http://res.cloudinary.com/djq37xptm/image/upload/v1686724803/jfmccml1pccm0hmkfziz.jpg",
+    }
+    -if Failed
+    {
+    message: String,
+    success: bool
+    }
+---
+
+#### GET /company/companyDetails/:id  (id as params) 
+---
+    -if Success (201)
+    {
+    "_id": "648960c331e8b1d00802de15",
+    "companyName": "BrandBuilder",
+    "companyCategory": "IT Services",
+    "companyRating": 3.2,
+    "companyDetails": "It COmpany",
+    "companyLogo": "http://res.cloudinary.com/djq37xptm/image/upload/v1686724803/jfmccml1pccm0hmkfziz.jpg",
+    }
+
+    -if Failed
+    {
+    message: String,
+    success: bool
+    }
+---
+
+#### GET /company/companyDetails/:id  (id as params) 
+---
+    -if Success (201)
+    {
+    "_id": "648960c331e8b1d00802de15",
+    "companyName": "BrandBuilder",
+    "companyCategory": "IT Services",
+    "companyRating": 3.2,
+    "companyDetails": "It COmpany",
+    "companyLogo": "http://res.cloudinary.com/djq37xptm/image/upload/v1686724803/jfmccml1pccm0hmkfziz.jpg",
+    }
+
+    -if Failed
+    {
+    message: String,
+    success: bool
+    }
+---
+
+#### POST /subs/addSubs (name, listingCompany(_id), sliverPlan, goldPlan, platinumPlan, details)
+---
+    -if Success (201) 
+    {
+    "message": "Subscription Paln added successfully.",
+    "success": true
+    }
+
+    -if Failed
+    {
+    message: String,
+    success: bool
+    }
+---
+
+#### GET /subs/allSub 
+---
+    -if Success (201)  
+    [
+    {
+    "_id": "648960c331e8b1d00802de15",
+    "name": "SEO",
+    "sliverPlan": 70,
+    "goldPlan": 100,
+    "platinumPlan": 120,
+    "details": "Make our site appear top",
+    "__v": 0,
+    "companyName": "BrandBuilder",
+    "companyCategory": "IT Services",
+    "companyRating": 3.2,
+    "companyDetails": "It COmpany",
+    "companyLogo": "http://res.cloudinary.com/djq37xptm/image/upload/v1686724803/jfmccml1pccm0hmkfziz.jpg"
+    }]
+
+    -if Failed
+    {
+    message: String,
+    success: bool
+    }
+---
+
+#### GET /subs/allSubs/:id 
+---  
+    -if Success (201)  
+    {
+    "_id": "648960c331e8b1d00802de15",
+    "name": "SEO",
+    "sliverPlan": 70,
+    "goldPlan": 100,
+    "platinumPlan": 120,
+    "details": "Make our site appear top",
+    "companyName": "BrandBuilder",
+    "companyCategory": "IT Services",
+    "companyRating": 3.2,
+    "companyDetails": "It COmpany",
+    "companyLogo": "http://res.cloudinary.com/djq37xptm/image/upload/v1686724803/jfmccml1pccm0hmkfziz.jpg"
+    }
+
+    -if Failed
+    {
+    message: String,
+    success: bool
+    }
+---
+#### POST /otp/send (email)
+---
+    -if Success (201)
+    {
+    message:"OTP sent successfully." ,
+    success:true ,
+    }
+
+    -if Failed
+
+    {
+    message:String,
+    success: bool
+    }
+---
+#### POST /otp/validate (email,otp)
+---
+    -if Success (201)
+    {
+    message: OTP is valid ,
+    success:  true   }
+
+    -if Failed
+
+    {
+    message:Not Signed Up. Use correct email.,
+    success: false
+    }
+---
+
+
+
+# Freelancer Auth:
+#### POST /user/fsignup (username, email, userpassword, phoneNumber) 
+---
+    -if Success
+    {
+    message: string,
+    success: bool
+    }
+    -if Failed
+    {
+    message: String,
+    success: bool,
+    }
+---
+#### POST /user/flogin (username, userpassword) 
+---
+    -if Success
+    {
+    message: string,
+    success: bool,
+    _id: String,
+    username: String,
+    email: String,
+    phoneNumber: String,
+    }
+    -if Failed{
+    message: String,
+    success: bool
+    }
+    ---
+
+
+
+---
+
+
+
+# Freelancer Profile:
+
+
+#### POST /freelancer/addprofile (_id, name, image, skill, experience, rating, charge ) 
+---
+    -if Success
+    {
+    message: string
+    }
+    -if Failed
+    {
+    message: String
+    }
+---
+
+#### GET /freelancer/view
+---
+    -if Success
+    {
+    id: String,
+    name: String,
+    image: String,
+    skill: String,
+    experience: Number,
+    rating: String,
+    charge: String
+    }
+    -if Failed
+    {
+    message: String
+    }
+---
+
+#### DELETE /freelancer/delete/:id
+---
+    -if Success(200)
+    {
+    message: String
+    }
+    -if Failed
+    {
+    message: String
+    }
+---
+
+#### UPDATE /freelancer/update/:id
+---
+    -if Success
+    {
+    id: String,
+    name: String,
+    image: String,
+    skill: String,
+    experience: Number,
+    rating: String,
+    charge: String
+    }
+    -if Failed
+    {
+    message: String
+    }
+---
+
+[Use the template at the bottom](#editing-this-readme)!
 
 ## Add your files
 
