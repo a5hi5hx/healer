@@ -59,7 +59,7 @@ try {
       if (result) {
         delete user._doc.password;
 
-        return res.status(201).json({message: "valid Password.", success: true, token: token, ...user._doc});
+        return res.status(201).json({message: "valid Password.", success: true, ...user._doc});
       } else {
         return res.status(400).json({message: "Invalid Password.", success: false});
       }
