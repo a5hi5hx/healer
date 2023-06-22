@@ -5,8 +5,9 @@ const freelancerDesc = require('../models/freelancer.desc');
 
 router.post('/addprofile', async (req, res) => {
   try {
-    const { name,image, skill, experience, rating, charge } = req.body;
+    const { _id, name,image, skill, experience, rating, charge } = req.body;
     const freelancer = new Freelancer({
+      _id,
       name,
       image,
       skill,
