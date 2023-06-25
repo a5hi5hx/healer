@@ -46,11 +46,11 @@ router.get('/allSubs/:id', async (req, res) => {
       if (!subs) {
         return res.status(400).json({ message: "Not Found", success: false });
       }
-      const listingCompany = subs[0].listingCompany; 
-      const mergedSubs = { ...subs[0]._doc, ...listingCompany._doc };
-      delete mergedSubs.listingCompany;
+      // const listingCompany = subs[0].listingCompany; 
+      // const mergedSubs = { ...subs[0]._doc, ...listingCompany._doc };
+      // delete mergedSubs.listingCompany;
   
-      return res.status(201).send(mergedSubs);
+      return res.status(201).send(subs);
     } catch (error) {
       return res.status(500).json({ message: "An error occurred.", success: false, error: error.message });
     }
