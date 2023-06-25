@@ -6,6 +6,7 @@ const companySubscriptionServices = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   listingCompany: {
     type: Schema.Types.ObjectId,

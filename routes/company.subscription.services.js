@@ -8,6 +8,10 @@ if(!name || !listingCompany || !sliverPlan || !goldPlan || !platinumPlan || !det
 return res.status(400).json({message: "Missing Required Fields.", success: false});
 }
 try {
+  const sub = await subsServices.findOne({name: name, listingCompany: listingCompany});
+  if(sub){
+    return res.status(400).json({message: "Service for company Already exists", success: true});
+  }
     const addSubs = new subsServices({name, listingCompany, sliverPlan, goldPlan, platinumPlan, details});
 addSubs.save().then(()=> {
 return res.status(201).json({ message: 'Subscription Paln added successfully.', success: true});
