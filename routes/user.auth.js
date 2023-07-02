@@ -6,6 +6,10 @@ const router = express.Router();
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
 const otpsave = require('../models/otp.model');
+const cloudinary = require("cloudinary");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 async function sendOTPByEmail(email)  {
   generateOtp = function () {
@@ -45,33 +49,67 @@ const otp = generateOtp();
     }
   });
 }
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
-
-router.route('/signup').post(async (req, res)=> {
+router.route("/signup").post(upload.single("image"), async (req, res) => {
 const {username, email, password, phoneNumber} = req.body;
+const image = req.file;
 try {
     if(await User.findOne({email: email}) || await User.findOne({username: username}))
     {
         return res.status(400).json({message: "User already exists. Try resetting password.", success: false});
     }
+// const saltvalue = await Math.floor(Math.random() * (20 - 10 + 1)) + 10;
+// const salt = await bcrypt.genSaltSync(saltvalue);
+// const encpassword = await bcrypt.hashSync(password, salt);
+// let usr = new User({
+//     username, email, password: encpassword, phoneNumber
+// });
+// if(await usr.validate()){
+//     return res.status(400).json({message: "Validation Error. Try validating all fields first.", success: false});
+// }
 const saltvalue = await Math.floor(Math.random() * (20 - 10 + 1)) + 10;
-const salt = await bcrypt.genSaltSync(saltvalue);
-const encpassword = await bcrypt.hashSync(password, salt);
-let usr = new User({
-    username, email, password: encpassword, phoneNumber
-});
-if(await usr.validate()){
-    return res.status(400).json({message: "Validation Error. Try validating all fields first.", success: false});
-}
-await usr.save()
-  .then(() => {
-    const token = jwt.sign({ id: usr._id }, process.env.tokenSecret);
-sendOTPByEmail(email);
-    res.status(201).json({ message: "User created.", success: true , token: token});
-  })
-  .catch((error) => {
-    res.status(400).json({ message: "User Creation error", success: false, error: error });
+const salt =  await bcrypt.genSaltSync(saltvalue);
+const encpassword =  await bcrypt.hashSync(password, salt);
+
+const rs = await cloudinary.v2.uploader
+.upload_stream({ resource_type: "image" }, (error, result) => {
+  if (result) {
+  
+// const encpassword =  bcrypt.hashSync(password, salt);
+    // Save user to MongoDB
+    let usr = new User({
+      username, email, password: encpassword, phoneNumber, image: result.url
   });
+ 
+    
+  usr.save()
+      .then(() => {
+            const token = jwt.sign({ id: usr._id }, process.env.tokenSecret);
+        sendOTPByEmail(email);
+    delete usr._doc.password;
+            res.status(201).json({ message: "User created.", success: true ,usr, token: token});
+          })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json({ msg: "Error saving user" });
+      });
+      
+// await usr.save()
+//   .then(() => {
+//     const token = jwt.sign({ id: usr._id }, process.env.tokenSecret);
+// sendOTPByEmail(email);
+//     res.status(201).json({ message: "User created.", success: true , token: token});
+//   })
+//   .catch((error) => {
+//     res.status(400).json({ message: "User Creation error", success: false, error: error });
+//   });
+  }}).end(image.buffer);
 } catch (error) {
   console.log(error);
     if (error.name === 'ValidationError') {
