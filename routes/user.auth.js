@@ -87,7 +87,6 @@ const rs = await cloudinary.v2.uploader
       username, email, password: encpassword, phoneNumber, image: result.url
   });
  
-    
   usr.save()
       .then(() => {
             const token = jwt.sign({ id: usr._id }, process.env.tokenSecret);
@@ -129,6 +128,7 @@ const rs = await cloudinary.v2.uploader
     }
 
 });
+
 
 router.post('/login', async (req, res) => {
     const {username, userpassword} = req.body;

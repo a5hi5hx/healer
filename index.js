@@ -48,7 +48,7 @@ app.use('/freelancerDesc', require("./routes/freelancerdesc"));
 app.use('/fhistory',require('./routes/fhistory'));
 app.use('/services', require('./routes/services'));
 app.use('/invoice', require('./routes/performa.invoice'));
-
+app.use('/user', require('./routes/user.profile'));
 
 
 connectDB().then(() => {
