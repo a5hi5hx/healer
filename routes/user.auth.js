@@ -81,7 +81,7 @@ const encpassword =  await bcrypt.hashSync(password, salt);
 // const encpassword =  bcrypt.hashSync(password, salt);
     // Save user to MongoDB
     let usr = new User({
-      username, email, password: encpassword, phoneNumber, image: result.url
+      username, email, password: encpassword, phoneNumber
   });
   if(await usr.validate()){
     return res.status(400).json({message: "Validation Error. Try validating all fields first.", success: false});
