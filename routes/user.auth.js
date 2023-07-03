@@ -56,9 +56,8 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-router.route("/signup").post(upload.single("image"), async (req, res) => {
+router.route("/signup").post( async (req, res) => {
 const {username, email, password, phoneNumber} = req.body;
-const image = req.file;
 try {
     if(await User.findOne({email: email}) || await User.findOne({username: username}))
     {
@@ -70,26 +69,26 @@ try {
 // let usr = new User({
 //     username, email, password: encpassword, phoneNumber
 // });
-// if(await usr.validate()){
-//     return res.status(400).json({message: "Validation Error. Try validating all fields first.", success: false});
-// }
+
 const saltvalue = await Math.floor(Math.random() * (20 - 10 + 1)) + 10;
 const salt =  await bcrypt.genSaltSync(saltvalue);
 const encpassword =  await bcrypt.hashSync(password, salt);
 
-const rs = await cloudinary.v2.uploader
-.upload_stream({ resource_type: "image" }, (error, result) => {
-  if (result) {
+// const rs = await cloudinary.v2.uploader
+// .upload_stream({ resource_type: "image" }, (error, result) => {
+//   if (result) {
   
 // const encpassword =  bcrypt.hashSync(password, salt);
     // Save user to MongoDB
     let usr = new User({
       username, email, password: encpassword, phoneNumber, image: result.url
   });
- 
+  if(await usr.validate()){
+    return res.status(400).json({message: "Validation Error. Try validating all fields first.", success: false});
+}
   usr.save()
       .then(() => {
-            const token = jwt.sign({ id: usr._id }, process.env.tokenSecret);
+            const token = jwt.sign({ id: usr._id, role:usr.role }, process.env.tokenSecret);
         sendOTPByEmail(email);
     delete usr._doc.password;
             res.status(201).json({ message: "User created.", success: true ,usr, token: token});
@@ -108,7 +107,7 @@ const rs = await cloudinary.v2.uploader
 //   .catch((error) => {
 //     res.status(400).json({ message: "User Creation error", success: false, error: error });
 //   });
-  }}).end(image.buffer);
+  // }}).end(image.buffer);
 } catch (error) {
   console.log(error);
     if (error.name === 'ValidationError') {
@@ -149,7 +148,7 @@ try {
         return res.status(400).json({message: "Invalid Password.", success: false});
       }
       if (result) {
-        const token = jwt.sign({ id: user._id }, 'somesecretkey');
+        const token = jwt.sign({ id: user._id, role: user.role}, 'somesecretkey');
         delete user._doc.password;
 
         return res.status(201).json({message: "valid Password.", success: true, token: token, ...user._doc});

@@ -36,6 +36,10 @@ const FreelancerUser = Schema({
       message: 'Invalid phone number format',
     },
   },
+  role: {
+    type: String,
+    default: "F"
+  }
 });
 
 module.exports = mongoose.model("FreelancerUser", FreelancerUser);

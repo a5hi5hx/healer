@@ -43,7 +43,12 @@ const User = Schema({
   image: {
    type: String,
    default:"https://res.cloudinary.com/djq37xptm/image/upload/v1677953696/i02sxwh0mn1biz6ivgiu.jpg",
-  }
+  },
+  role: {
+    type: String,
+    default: 'U'
+    }
+
 });
 
 module.exports = mongoose.model("User", User);

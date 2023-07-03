@@ -10,7 +10,7 @@ const cloudinary = require("cloudinary");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
+const JWT = require('../middlewares/authRole');
 
 // Cloudinary configuration
 cloudinary.config({
@@ -19,16 +19,23 @@ cloudinary.config({
     api_secret: process.env.API_SECRET,
   });
 
-  router.route("/imgUp").post(upload.single("image"), async (req, res) => {
-    const {uid} = req.body;
+  router.post('/imgUpload', upload.single("image"), async (req, res) => {
     const image = req.file;
+    const token = req.headers.authorization.split(' ')[1];
+
     try {
-        if(!(await User.findOne({_id: uid})))
+     await jwt.verify(token, process.env.tokenSecret, (err, decoded) => {
+        if (err) {
+          // Handle token verification error
+          return res.status(401).json({ error: 'Invalid token' });
+        }
+        const uid = decoded.id;
+        if(!( User.findOne({_id: uid})))
         {
             return res.status(400).json({message: "User doesn't exists. Try sign up.", success: false});
         }
   
-    const rs = await cloudinary.v2.uploader
+    const rs =  cloudinary.v2.uploader
     .upload_stream({ resource_type: "image" }, (error, result) => {
       if (result) {
         User.findByIdAndUpdate({_id: uid}, { image: result.url })
@@ -43,7 +50,7 @@ cloudinary.config({
           
   
       }}).end(image.buffer);
-    } catch (error) {
+    })} catch (error) {
       console.log(error);
           res.status(500).json({ message: "An error occurred.", success: false, error: error.message });
         }
