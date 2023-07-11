@@ -74,6 +74,29 @@ try {
 }
 });
 
+
+router.route("/tokenValid").get(async (req, res) => {
+  try {
+    const token = req.header("x-auth-token");
+    if (!token) {
+      return res.status(400).json({ msg: false , success: false});
+    }
+    const verified = jwt.verify(token, 'somesecretkey');
+    if (!verified) {
+      return res.status(400).json({ msg: false , success: false});
+    }
+    const user = await Company.findById(verified.id);
+    if (!user) {
+      return res.status(400).json({ msg: false, success: false });
+    }
+    delete user._doc.password;
+
+    return res.json({ msg: true, success: true, ...user._doc });
+
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
 //admin panel for the management of freelancer so use of session or cookies predferred rather than authentication token
 
 module.exports = router;
