@@ -31,8 +31,8 @@ const CompanyUser = Schema({
     validate: {
       validator: function (value) {
         const phoneRegex = /^98\d{8}$/;
-        const landRegex = /^061\d{9}$/;
-        if((phoneRegex.test(value) || landRegex.test(value)))
+        
+        if(phoneRegex.test(value))
         {return;}
       },
       message: 'Invalid phone number format',
