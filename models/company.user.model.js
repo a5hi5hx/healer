@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const User = Schema({
+const CompanyUser = Schema({
   username: {
     type: String,
     unique: true,
@@ -30,12 +30,18 @@ const User = Schema({
     required: true,
     validate: {
       validator: function (value) {
-        const phoneRegex = /^98\d{8}$/; 
-        return phoneRegex.test(value);
+        const phoneRegex = /^98\d{8}$/;
+        const landRegex = /^061\d{9}$/;
+        if((phoneRegex.test(value) || landRegex.test(value)))
+        {return;}
       },
       message: 'Invalid phone number format',
     },
   },
+  role: {
+    type: String,
+    default: "C"
+  }
 });
 
-module.exports = mongoose.model("User", User);
+module.exports = mongoose.model("CompanyUser", CompanyUser);

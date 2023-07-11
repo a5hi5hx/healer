@@ -4,12 +4,12 @@ const company = require('./about.company');
 
 // Service Schema
 const serviceSchema = new Schema({
-  lister: {
+   lister: {
     type: Schema.Types.ObjectId,
     ref: company,
     required: true,
-},
-name: {
+  },
+  name: {
     type: String,
     required: true
   },
@@ -17,41 +17,22 @@ name: {
     type: String,
     required: true
   },
-  price: {
-type: Number,
-required: function () {
-  return this.planType === 'one-time';
-}
+  silver: {
+    type: Number,
+    required: true
   },
-  subscriptionPrice: {
-    silver: {
-      type: Number,
-      required: function () {
-        return this.planType === 'subscription';
-      }
-    },
-    gold: {
-      type: Number,
-      required: function () {
-        return this.planType === 'subscription';
-      }
-    },
-    platinum: {
-      type: Number,
-      required: function () {
-        return this.planType === 'subscription';
-      }
-    }
+  gold: {
+    type: Number,
+    required: true
+  },
+  platinum: {
+    type: Number,
+    required: true
   },
   features: {
     type: [String],
     required: true
-  },
-  planType: {
-    type: String,
-    enum: ['one-time', 'subscription'],
-    required: true
-  },
+  }
  
 });
 

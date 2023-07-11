@@ -247,6 +247,57 @@
 ---
 
 
+# Company Auth:
+
+#### POST /company/cSignup
+---
+body
+{
+  "username":"brandbuilder",
+  "email":"test@brandbuilder.com.np",
+  "phoneNumber":"7894563210",
+  "userpassword":"123456789"
+}
+---
+---
+Resopnse
+{
+  "message": "Company created.",
+  "u": {
+    "username": "brandbuilder1",
+    "email": "test1@brandbuilder.com.np",
+    "phoneNumber": "7894563210",
+    "role": "C",
+    "_id": "64acfa08044cd4454c833f50",
+    "__v": 0,
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YTI3ZGJlMDY1NDg3YmFlMmYzZWFkMSIsInJvbGUiOiJDIiwiaWF0IjoxNjg5MDU3NTg1fQ.-tgvWaaWjE98yCDVLR6CwaWnXBp_G_uDylcTQuHCGLk"
+  },
+  "success": true
+}
+---
+#### POST /company/cLogin
+---
+    send body: 
+    {
+  "username":"brandbuilder",
+  "userpassword":"123456789"
+}
+---
+---
+    response
+    {
+  "message": "valid Password.",
+  "success": true,
+  "_id": "64a27dbe065487bae2f3ead1",
+  "username": "brandbuilder",
+  "email": "test@brandbuilder.com.np",
+  "phoneNumber": "061456789",
+  "role": "C",
+  "__v": 0,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YTI3ZGJlMDY1NDg3YmFlMmYzZWFkMSIsInJvbGUiOiJDIiwiaWF0IjoxNjg5MDU3NTg1fQ.-tgvWaaWjE98yCDVLR6CwaWnXBp_G_uDylcTQuHCGLk"
+}
+---
+
 
 # Freelancer Auth:
 #### POST /user/fsignup (username, email, userpassword, phoneNumber) 

@@ -49,7 +49,7 @@ app.use('/fhistory',require('./routes/fhistory'));
 app.use('/services', require('./routes/services'));
 app.use('/invoice', require('./routes/performa.invoice'));
 app.use('/user', require('./routes/user.profile'));
-
+app.use('/company', require('./routes/company.auth'));
 
 connectDB().then(() => {
   app.listen(process.env.port, () => {
